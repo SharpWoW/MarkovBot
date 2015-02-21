@@ -1,0 +1,12 @@
+## Interface: 60000
+## Title: Markov Bot
+## Notes: Analyzes guild chat and replies based on Markov chains
+## Author: Sharparam
+## SavedVariables: MARKOVBOT
+
+log.lua
+db.lua
+markov.lua
+chat.lua
+events.lua
+main.lua

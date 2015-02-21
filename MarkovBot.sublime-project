@@ -1,0 +1,21 @@
+{
+    "build_systems":
+    [
+        {
+            "name": "Build moon files",
+            "working_dir": "${project_path:.}",
+            "shell_cmd": "moonc **.moon"
+        }
+    ],
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "."
+		}
+	],
+    "settings":
+    {
+        "atomic_save": false
+    }
+}

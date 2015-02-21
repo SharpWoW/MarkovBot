@@ -1,0 +1,3 @@
+# Ignore built Lua files
+*.lua
+MarkovBot.sublime-workspace
