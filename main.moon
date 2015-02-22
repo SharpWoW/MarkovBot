@@ -28,4 +28,11 @@ T.init = () =>
 T.generate_local = (seed, max) =>
     print markov\create seed, max
 
+export SLASH_MARKOVBOT1 = '/markov'
+export SLASH_MARKOVBOT2 = '/mb'
+
+SlashCmdList['MARKOVBOT'] = (msg, editbox) ->
+    markov\save msg
+    T\generate_local msg
+
 export MarkovBot = T
