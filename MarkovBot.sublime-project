@@ -13,9 +13,5 @@
 			"follow_symlinks": true,
 			"path": "."
 		}
-	],
-    "settings":
-    {
-        "atomic_save": false
-    }
+	]
 }
