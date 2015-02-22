@@ -37,7 +37,7 @@ events.CHAT_MSG_GUILD = (msg, sender) ->
     receive 'GUILD', msg, sender
 
 events.CHAT_MSG_INSTANCE = (msg, sender) ->
-    receive 'INSTANCE', msg, sender
+    receive 'INSTANCE_CHAT', msg, sender
 
 events.CHAT_MSG_PARTY = (msg, sender) ->
     receive 'PARTY', msg, sender
