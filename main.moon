@@ -26,7 +26,7 @@ T.init = () =>
     T.db\init!
 
 T.generate_local = (seed, max) =>
-    print markov\create seed, max
+    print markov\create markov\getseed(seed), max
 
 export SLASH_MARKOVBOT1 = '/markov'
 export SLASH_MARKOVBOT2 = '/mb'

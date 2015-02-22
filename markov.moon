@@ -70,6 +70,26 @@ markov.save = (str) =>
     --for phrase in *subphrases
     --    @save phrase
 
+markov.getseed = (str) =>
+    words = {}
+    str = str\lower!
+    str\gsub '[^%s]+', (w) -> words[#words + 1] = w
+    local seed
+    if #words < 2
+        candidates = {}
+        for key, _ in pairs db.main.words
+            word = words[1]
+            if key\match("^#{word}%s") or key\match "%s#{word}$"
+                candidates[#candidates + 1] = key
+        seed = candidates[random(1, #candidates)] unless #candidates < 1
+    else
+        index = random 1, #words - 1
+        --secondindex = random 1, #words
+        --while secondindex == index
+        --    secondindex = random 1, #words
+        seed = '%s %s'\format words[index], words[index + 1]
+    seed
+
 markov.create = (seed, maxwords = random(5, 50)) =>
     -- We build the result string in a table for easier processing
     result = {}
@@ -90,16 +110,15 @@ markov.reply = (msg, channel, silent) =>
     if msg\len! < 1
         chat\send channel, 'Not enough data to process.' unless silent
         return false
-    words = {}
-    msg = msg\lower!
-    msg\gsub '[^%s]+', (w) -> words[#words + 1] = w
-    if #words < 2
-        chat\send channel, 'Not enough words to process.' unless silent
+    local seed
+    if random(0, 1) == 1
+        seed = @getseed msg
+    else
+        words = {}
+        msg\gsub '[^%s]+', (w) -> words[#words + 1] = w
+        seed = @getseed words[random(1, #words)]
+    if not seed
+        T.chat\send 'Couldn\'t make a sentence based on that input :(', 'GUILD' unless silent
         return false
-    index = random 1, #words
-    secondindex = random 1, #words
-    while secondindex == index
-        secondindex = random 1, #words
-    seed = '%s %s'\format words[index], words[secondindex]
     T.chat\send @create(seed), channel
     true
