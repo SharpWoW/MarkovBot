@@ -40,6 +40,7 @@ log.prefixes =
 msgtemplate = '[%s] [%%s]: %%s'\format NAME
 
 log.log = (level, text, ...) =>
+    return if level < T.db.main.loglevel
     msg = msgtemplate\format (@.prefixes[level] or 'UNKNOWN'), text\format ...
     DEFAULT_CHAT_FRAME\AddMessage msg
     msg\len!
