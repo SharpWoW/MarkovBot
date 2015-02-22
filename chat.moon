@@ -25,31 +25,39 @@ MARKOV_PATTERN = '^%[Markov%]'
 
 T.chat =
     lastreply: time()
+    channeltimers: {}
+    throttled:
+        GUILD: true
+        RAID: true
+        PARTY: true
+        INSTANCE_CHAT: true
     commands: {
         '^!markov',
         '^!m'
     }
 
 import random from math
-import markov, chat, db from T
+import log, markov, chat, db from T
 
 chat.send = (msg, channel = 'GUILD', target) =>
     SendChatMessage('%s %s'\format(MARKOV_PREFIX, msg), channel, nil, target)
 
 chat.receive = (channel, msg, sender, target) =>
     return if msg\match MARKOV_PATTERN
-    handled = false
 
     for command in *@.commands
         if msg\match "#{command} "
+            if @.throttled[channel] and @.channeltimers[channel] and time() - @.channeltimers[channel] < db.main.command_cooldown
+                log\debug 'Command still on cooldown in %s.', channel
+                return
             markov\reply msg\match("#{command} (.+)"), channel, channel == 'CHANNEL' and target or sender
-            handled = true
-            break
+            @.channeltimers[channel] = time()
+            return
 
-    if not handled and channel == 'GUILD'
+    if channel == 'GUILD'
         @.lastreply = time() if @.lastreply == 0
         if time! - @.lastreply > random(db.main.reply_min, db.main.reply_max)
             success = markov\reply msg, 'GUILD', nil, true
             @.lastreply = time! if success
     
-    markov\save msg unless handled or msg\match MARKOV_PATTERN
+    markov\save msg unless msg\match MARKOV_PATTERN

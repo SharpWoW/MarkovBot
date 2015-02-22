@@ -43,3 +43,4 @@ db.init = () =>
     @.main.loglevel = log.levels.DEBUG unless type(@.main.loglevel) == 'number'
     @.main.reply_min = 200 unless type(@.main.reply_min) == 'number'
     @.main.reply_max = 400 unless type(@.main.reply_max) == 'number'
+    @.main.command_cooldown = 60 unless type(@.main.command_cooldown) == 'number'
