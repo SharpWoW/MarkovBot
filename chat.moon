@@ -20,8 +20,8 @@
 
 NAME, T = ...
 
-MARKOV_PREFIX = '[Markov] '
-MARKOV_PATTERN = '^%[Markov%] '
+MARKOV_PREFIX = '[Markov]'
+MARKOV_PATTERN = '^%[Markov%]'
 
 T.chat =
     lastreply: 0
