@@ -26,8 +26,8 @@ frame = CreateFrame 'Frame'
 
 events = {}
 
-receive = (channel, msg, sender) ->
-    chat\receive channel, msg, sender
+receive = (channel, msg, sender, target) ->
+    chat\receive channel, msg, sender, target
 
 events.ADDON_LOADED = (name) ->
     return unless name == NAME
@@ -55,7 +55,22 @@ events.CHAT_MSG_YELL = (msg, sender) ->
     receive 'YELL', msg, sender
 
 events.CHAT_MSG_CHANNEL = (msg, sender, _, channel, _, _, _, index) ->
-    receive channel, msg, sender if index == 1 or index == 2
+    receive 'CHANNEL', msg, sender, index
+
+events.CHAT_MSG_BN_WHISPER = (msg, sender) ->
+    receive 'BN_WHISPER', msg, sender
+
+events.CHAT_MSG_MONSTER_SAY = (msg) ->
+    receive 'MONSTER_SAY', msg
+
+events.CHAT_MSG_MONSTER_YELL = (msg) ->
+    receive 'MONSTER_YELL', msg
+
+events.CHAT_MSG_MONSTER_WHISPER = (msg) ->
+    receive 'MONSTER_YELL', msg
+
+events.CHAT_MSG_MONSTER_PARTY = (msg) ->
+    receive 'MONSTER_PARTY', msg
 
 frame\SetScript 'OnEvent', (event, ...) =>
     events[event](...) if events[event]

@@ -113,7 +113,7 @@ markov.create = (seed, maxwords = random(5, 50)) =>
         lastword = word
     table.concat result, ' '
 
-markov.reply = (msg, channel, silent) =>
+markov.reply = (msg, channel, target, silent) =>
     @save msg
     if msg\len! < 1
         chat\send channel, 'Not enough data to process.' unless silent
@@ -128,5 +128,7 @@ markov.reply = (msg, channel, silent) =>
     if not seed
         T.chat\send 'Couldn\'t make a sentence based on that input :(', 'GUILD' unless silent
         return false
-    T.chat\send @create(seed), channel
+    reply = @create seed
+    return if reply == msg\lower!
+    T.chat\send reply, channel, target
     true
