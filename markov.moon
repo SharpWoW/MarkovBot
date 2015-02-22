@@ -95,14 +95,22 @@ markov.create = (seed, maxwords = random(5, 50)) =>
     result = {}
     seed\gsub '[^%s]+', (w) -> result[#result + 1] = w
     count = #result
-    while count < maxwords
+    lastword = nil
+    lastcount = 0
+    while count < maxwords and lastcount < 3
         key = '%s %s'\format result[#result - 1], result[#result]
         list = db.main.words[key]
         unless list
             log\debug 'No entries found for %s.', key
             break
-        result[#result + 1] = list[random(1, #list)].word
+        word = list[random(1, #list)].word
+        result[#result + 1] = word
         count += 1
+        if word == lastword
+            lastcount += 1
+        else
+            lastcount = 0
+        lastword = word
     table.concat result, ' '
 
 markov.reply = (msg, channel, silent) =>
