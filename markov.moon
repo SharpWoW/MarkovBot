@@ -33,6 +33,22 @@ parenpairs =
     '[': ']'
     '{': '}'
 
+isduplicate = (trigger, reply using nil) ->
+    trigger = trigger\lower!
+    reply = reply\lower!
+    words = {}
+    reply\gsub '[^%s]+', (w) -> words[#words + 1] = w
+    count = 0
+    start = 1
+    for word in *words
+        s, e = trigger\find word, start
+        if s and e
+            start = e
+            count += 1
+        else
+            break
+    return count == #words
+
 markov.save = (str) =>
     -- Make it lowercase for less duplicates
     str = str\lower!
@@ -129,6 +145,6 @@ markov.reply = (msg, channel, target, silent) =>
         T.chat\send 'Couldn\'t make a sentence based on that input :(', 'GUILD' unless silent
         return false
     reply = @create seed
-    return if reply == msg\lower!
+    return false if silent and isduplicate(msg, reply) --reply == msg\lower!
     T.chat\send reply, channel, target
     true
