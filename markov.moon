@@ -45,7 +45,7 @@ markov.save = (str) =>
     --        subphrases[#subphrases + 1] = p
     --        ''
     -- For now, just strip all parens and puncuation, makes for a little more comedic phrases too
-    str = str\gsub '%p', ' '
+    str = str\gsub '[%.,_!?<>()[%]{}"]', ' '
     -- Begin by getting a table of all the words
     words = {}
     str\gsub '[^%s]+', (w) ->
